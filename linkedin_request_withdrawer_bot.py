@@ -36,41 +36,53 @@ submit.click()
 driver.get(
     "https://www.linkedin.com/mynetwork/invitation-manager/sent/")
 
-# Find the last page number
-last_page_number = driver.find_element_by_xpath(
-    "//ul[@class='artdeco-pagination__pages artdeco-pagination__pages--number']/li[last()]").text
+try:
+    # Find the last page number
+    last_page_number = driver.find_element_by_xpath(
+        "//ul[@class='artdeco-pagination__pages artdeco-pagination__pages--number']/li[last()]").text
+except:
+    last_page_number = 1
 
-print(last_page_number)
+print("Last page number: ", last_page_number)
+
 # Reverse iterate over the pages from last_page_number to 1
 for page_number in range(int(last_page_number), 0, -1):
     try:
         driver.get(
             "https://www.linkedin.com/mynetwork/invitation-manager/sent/?filterCriteria=&invitationType=&page={}".format(page_number))
 
-        all_buttons = driver.find_elements_by_tag_name("button")
+        while True:
 
-        withdraw_buttons = [
-            btn for btn in all_buttons if btn.text == "Withdraw"]
+            print("Rescanning page {} for pending connection requests".format(
+                page_number))
+            time.sleep(1)
+            all_buttons = driver.find_elements_by_tag_name("button")
+            withdraw_buttons = [
+                btn for btn in all_buttons if btn.text == "Withdraw"]
 
-        # Reverse iterate over the withdraw buttons
-        for withdraw_button in reversed(withdraw_buttons):
-            try:
-                driver.execute_script("arguments[0].click();", withdraw_button)
-                time.sleep(0.1)
+            # Reverse iterate over the withdraw buttons
+            for withdraw_button in reversed(withdraw_buttons):
+                try:
+                    driver.execute_script(
+                        "arguments[0].click();", withdraw_button)
+                    # time.sleep(0.1)
 
-                confirmation_buttons = driver.find_elements_by_tag_name(
-                    "button")
+                    confirmation_buttons = driver.find_elements_by_tag_name(
+                        "button")
 
-                for confirmation_button in confirmation_buttons:
-                    if confirmation_button.text == "Withdraw":
-                        driver.execute_script(
-                            "arguments[0].click();", confirmation_button)
-                    time.sleep(0.1)
-            except Exception as e:
-                print(e)
-                continue
+                    for confirmation_button in confirmation_buttons:
+                        if confirmation_button.text == "Withdraw":
+                            driver.execute_script(
+                                "arguments[0].click();", confirmation_button)
+                        # time.sleep(0.1)
+                except Exception as e:
+                    print("Error in finding confirmation button: ", e)
+                    continue
+
+            if len(withdraw_buttons) == 0:
+                break
 
     except Exception as e:
-        print(e)
+        print("Error while changing pages: ", e)
         continue
 driver.quit()
