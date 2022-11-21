@@ -42,29 +42,70 @@ submit.click()
 # Wish Etsy Shopify AMD IBM
 
 applications = [
+
     # {
-    #     "companyName": "Gojek",
-    #     "jobPosition": "linkedin.com/jobs/view/3279191880",
-    #     "connection_requests_limit": 5
-    # },
-    # {
-    #     "companyName": "Citi",
+    #     "companyName": "Ciena",
     #     "jobPosition": "Java Developer",
     #     "connection_requests_limit": 10
     # },
-    {
-        "companyName": "Razorpay",
-        "jobPosition": "Software Engineer - 6484",
-        "connection_requests_limit": 12
-    },
     # {
-    #     "companyName": "Synopsys",
-    #     "jobPosition": "Software Engineer 1",
+    #     "companyName": "Adobe Noida",
+    #     "jobPosition": "linkedin.com/jobs/view/3348381319",
+    #     "connection_requests_limit": 10
+    # },
+    # {
+    #     "companyName": "Airtel",
+    #     "jobPosition": "tinyurl.com/4jdcchz3",
+    #     "connection_requests_limit": 10
+    # },
+    # {
+    #     "companyName": "Canonical",
+    #     "jobPosition": "linkedin.com/jobs/view/3313546275",
+    #     "connection_requests_limit": 10
+    # },
+    # {
+    #     "companyName": "SingleStore",
+    #     "jobPosition": "linkedin.com/jobs/view/3249950428",
+    #     "connection_requests_limit": 10
+    # },
+    # {
+    #     "companyName": "Optum",
+    #     "jobPosition": "linkedin.com/jobs/view/3341430407",
+    #     "connection_requests_limit": 10
+    # },
+    # {
+    #     "companyName": "lululemon",
+    #     "jobPosition": "linkedin.com/jobs/view/3351396400",
+    #     "connection_requests_limit": 10
+    # },
+    # {
+    #     "companyName": "JP Morgan Chase",
+    #     "jobPosition": "linkedin.com/jobs/view/3344054776",
+    #     "connection_requests_limit": 10
+    # },
+    # {
+    #     "companyName": "Ciena",
+    #     "jobPosition": "linkedin.com/jobs/view/3272804960",
     #     "connection_requests_limit": 10
     # }
+    # {
+    #     "companyName": "Synopsys",
+    #     "jobPosition": "linkedin.com/jobs/view/3288846069",
+    #     "connection_requests_limit": 10
+    # }
+    # {
+    #     "companyName": "Texas Instruments",
+    #     "jobPosition": "linkedin.com/jobs/view/3239699602",
+    #     "connection_requests_limit": 10
+    # },
+    {
+        "companyName": "Quadeye",
+        "jobPosition": "linkedin.com",
+        "connection_requests_limit": 10
+    }
 ]
-
 for application in applications:
+
     try:
         print("Application: " +
               application["companyName"] + " - " + application["jobPosition"])
@@ -124,21 +165,27 @@ for application in applications:
                 except:
                     time.sleep(0.1)
 
-                finally:
-                    add_note = driver.find_element_by_xpath(
-                        "//button[@aria-label='Add a note']")
+                # finally:
+                add_note = driver.find_element_by_xpath(
+                    "//button[@aria-label='Add a note']")
 
-                    # person name is "Aditya Sharma"
-                    peron_name = driver.find_element_by_xpath(
-                        "//span[@class='flex-1']").text
-                    # You can add a note to personalize your invitation to Aditya Sharma.
-                    peron_name = peron_name.replace(
-                        "You can add a note to personalize your invitation to ", "")
-                    print("Sending Request to ", peron_name,
-                          "Connection Requests Sent: ", connection_requests_sent + 1, " / ", application["connection_requests_limit"])
-                    first_name = peron_name.split(" ")[0]
-                    driver.execute_script("arguments[0].click();", add_note)
-                    time.sleep(2)
+                # person name is "Aditya Sharma"
+                person_name = driver.find_element_by_xpath(
+                    "//span[@class='flex-1']").text
+                # You can add a note to personalize your invitation to Aditya Sharma.
+                person_name = person_name.replace(
+                    "You can add a note to personalize your invitation to ", "")
+
+                if person_name == "Abhigyan Ghosh":
+                    # press the cross button
+                    close_button = driver.find_element_by_xpath(
+                        "//button[@aria-label='Close']")
+
+                print("Sending Request to ", person_name,
+                      "Connection Requests Sent: ", connection_requests_sent + 1, " / ", application["connection_requests_limit"])
+                first_name = person_name.split(" ")[0]
+                driver.execute_script("arguments[0].click();", add_note)
+                time.sleep(2)
 
                 # Type "Hello, I am interested in your profile." and click "Send".
                 message = driver.find_element_by_xpath(
